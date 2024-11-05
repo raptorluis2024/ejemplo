@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponseRedirect
 from .models import Flan
+from .forms import ContactFormForm
 
 
 def indice(request):
@@ -20,3 +21,15 @@ def flanes_privados(request):
     flanes = Flan.objects.filter(is_private = True)
     context = {"flanes": flanes}
     return render(request, 'flanes_privados.html', context)
+
+
+def contacto(request):
+    if request.method == "POST":
+        form = ContactFormForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect("/")
+    else:
+        form = ContactFormForm()
+
+    return render(request, "contactus.html", {"form":form})        
+
