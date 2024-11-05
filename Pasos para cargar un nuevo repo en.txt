@@ -1,0 +1,25 @@
+Pasos para cargar un nuevo repo en git
+
+1. crear un repo en git (publico o privado)
+2. inicializar el directorio en el pc local
+	git init
+3. hay que relacionar el directorio al repo
+	git remote add origin git@github.com:cuentagit/nuevo.git
+4. actualizar el directorio para sincronizar los cambios
+	git add .
+	git commit -r "first commit"
+5. crear el par de claves publica y privada para los cambios
+6. ssh-keygen
+7. copiar el contenido de la clave pública (archivo.pub) al deploy key en 
+GitHub
+8. en Git se va al apartado security y se genera el deploy key
+ejemplo:
+
+C:\Users\HP\.ssh>type id_ed25519.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGoGJQHyfPllBpOd1o/Ztr3b4oPx8vdK8XqipEmdaLIX hp@LAPTOP-PITOBODF
+
+9. colocar la rama main y hacer el push
+git branch -M main
+git push -u origin main
+
+
