@@ -18,7 +18,7 @@ from django.urls import path
 from web.views import indice, acerca, bienvenido ,flanes_privados, flanes_publicos, contacto, log_in,log_out,exito
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name="admin"),
     path('', flanes_publicos, name="indice"),
     path('acerca', acerca, name="acerca"),
     path('contacto/', contacto, name="contacto"),
@@ -26,5 +26,5 @@ urlpatterns = [
     path('login/', log_in, name="login"),
     path('logout/', log_out, name="logout"),
     path('exito/', exito, name="exito"),
-
+   
 ]

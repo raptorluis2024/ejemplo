@@ -34,8 +34,16 @@ def contacto(request):
         try:
             form =ContactFormForm(request.POST)
             if form.is_valid():
+                ## crea el nuevo formulario de contacto usando el formulario personalizado
+                ## por eso se hace a través del método create 
+                ## no nativamente como se hace con save() cuando el objeto proviene directamente del modelo
                 nuevo_form = ContactForm.objects.create(**form.cleaned_data)
-                return HttpResponseRedirect("/exito/")
+                ## se cargar el templato exito para evitar hacer el redirect 
+                template = loader.get_template('exito.html')
+                # el render carga la página exito pero sin cambiar la url
+                # hacer redirect implica tener la URL registrada
+                return HttpResponseRedirect('/exito/')
+                return HttpResponse(template.render({}, request))
         except ValueError:
             template = loader.get_template('contactus.html')
             context = {'form':form, 'error':"Error al procesar el formulario"}
