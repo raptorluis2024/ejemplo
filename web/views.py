@@ -1,11 +1,12 @@
 from django.shortcuts import render,HttpResponseRedirect,HttpResponse
 from .models import Flan
-from .forms import ContactFormForm
+from .forms import Formulario_Contacto,ContactFormForm
 from django.contrib.auth import login,logout, authenticate
 from django.template import loader
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from .models import ContactForm
 
 def indice(request):
     return render(request, 'index.html', {})
@@ -30,13 +31,18 @@ def flanes_privados(request):
 
 def contacto(request):
     if request.method == "POST":
-        form = ContactFormForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect("/")
+        try:
+            form =ContactFormForm(request.POST)
+            if form.is_valid():
+                nuevo_form = ContactForm.objects.create(**form.cleaned_data)
+                return HttpResponseRedirect("/exito/")
+        except ValueError:
+            template = loader.get_template('contactus.html')
+            context = {'form':form, 'error':"Error al procesar el formulario"}
+            return HttpResponse(template.render(context, request))
     else:
         form = ContactFormForm()
-
-    return render(request, "contactus.html", {"form":form})        
+        return render(request, "contactus.html", {"form":form})        
 
 def log_in(request):
     template = loader.get_template('login.html')
@@ -52,8 +58,12 @@ def log_in(request):
             return HttpResponse(template.render(context, request))
         else:
             login(request, user)
-            template = loader.get_template('flanes_privados.html')
-            usuario = User.objects.filter(username=usuario).values()[0]["username"]
-            context = {"user":usuario}
-            return HttpResponseRedirect(template.render(context, request))
+            return HttpResponseRedirect('/bienvenido/')
+        
+def log_out(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
+def exito(request):
+    return render(request, 'exito.html',{})
          
